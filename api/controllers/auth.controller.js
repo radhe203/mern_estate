@@ -1,8 +1,8 @@
 import user from "../models/user.models.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
-
-export async function signup(req, res,next) {
+import jwt from "jsonwebtoken";
+export async function signup(req, res, next) {
   const { username, password, email } = req.body;
 
   if (!username || !password || !email || username === "") {
@@ -20,6 +20,34 @@ export async function signup(req, res,next) {
   try {
     await newUser.save();
     res.json({ message: "user created sucessfully" });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function signin(req, res, next) {
+  const { username, password, email } = req.body;
+
+  try {
+    const validuser = await user.findOne({ email });
+    if (!validuser) {
+      return next(errorHandler(404, "user not found"));
+    }
+
+    const validpassword =  bcryptjs.compareSync(
+      password,
+      validuser.password
+    );
+    const token = jwt.sign({ id: validuser._id }, process.env.JWT_SECRET);
+    const {password:pass,...rest} = validuser._doc
+    res
+      .cookie("access_token", token, { httpOnly: true })
+      .status(200)
+      .json(rest);
+
+    if (!validpassword) {
+      return next(errorHandler(404, "Wrong Credentials !"));
+    }
   } catch (error) {
     next(error)
   }

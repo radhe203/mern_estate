@@ -19,7 +19,7 @@ export async function signup(req, res,next) {
 
   try {
     await newUser.save();
-    res.json({ message: "signup sucessfull" });
+    res.json({ message: "user created sucessfully" });
   } catch (error) {
     next(error)
   }

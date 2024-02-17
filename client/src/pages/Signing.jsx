@@ -1,21 +1,27 @@
 import React, { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import {
+  signInFailure,
+  signInStart,
+  signInSucess,
+} from "../redux/user/UserSlice";
+import { useDispatch, useSelector } from "react-redux";
 function Signin() {
   const [formData, setFormData] = useState({});
-  const [Error, SetError] = useState(null);
-  const [Lodaing, SetLoading] = useState(false);
+  const {error,loading} = useSelector(state => state.user)
   const navigate = useNavigate();
+  const Dispatch = useDispatch();
+
   function handleChange(e) {
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
     });
   }
-
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      SetLoading(true);
+      Dispatch(signInStart());
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
@@ -26,16 +32,13 @@ function Signin() {
 
       const data = await res.json();
       if (data.sucess === false) {
-        SetLoading(false);
-        SetError(data.message);
+        Dispatch(signInFailure(data.message));
         return;
       }
-      SetLoading(false);
-      SetError(null);
+      Dispatch(signInSucess(data));
       navigate("/");
     } catch (error) {
-      SetLoading(false);
-      SetError(error.message);
+     Dispatch(signInFailure(error.message))
     }
   }
   return (
@@ -60,9 +63,9 @@ function Signin() {
           <button
             type="submit"
             className=" bg-slate-700 text-white rounded-lg p-3 hover:opacity-95 uppercase disabled:opacity-80"
-            disabled={Lodaing}
+            disabled={loading}
           >
-            {Lodaing ? "Loging..." : "Sign in"}
+            {loading ? "Loging..." : "Sign in"}
           </button>
         </form>
         <div className="flex gap-2 mt-5">
@@ -71,7 +74,7 @@ function Signin() {
             <span className=" text-blue-700">Sign up</span>
           </Link>
         </div>
-        {Error && <p className=" text-red-500 mt-4">{Error}</p>}
+        {error && <p className=" text-red-500 mt-4">{error}</p>}
       </div>
     </>
   );

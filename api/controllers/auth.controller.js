@@ -26,7 +26,7 @@ export async function signup(req, res, next) {
 }
 
 export async function signin(req, res, next) {
-  const { username, password, email } = req.body;
+  const { password, email } = req.body;
 
   try {
     const validuser = await user.findOne({ email });
@@ -34,21 +34,17 @@ export async function signin(req, res, next) {
       return next(errorHandler(404, "user not found"));
     }
 
-    const validpassword =  bcryptjs.compareSync(
-      password,
-      validuser.password
-    );
+    const validpassword = bcryptjs.compareSync(password, validuser.password);
+    if (!validpassword) {
+      return next(errorHandler(404, "Wrong Credentials !"));
+    }
     const token = jwt.sign({ id: validuser._id }, process.env.JWT_SECRET);
-    const {password:pass,...rest} = validuser._doc
+    const { password: pass, ...rest } = validuser._doc;
     res
       .cookie("access_token", token, { httpOnly: true })
       .status(200)
       .json(rest);
-
-    if (!validpassword) {
-      return next(errorHandler(404, "Wrong Credentials !"));
-    }
   } catch (error) {
-    next(error)
+    next(error);
   }
 }

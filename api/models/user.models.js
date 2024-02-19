@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema(
         password:{
             type:String,
             required:true,
+        },
+        avatar:{
+            type:String,
+            default:'https://www.tenforums.com/attachments/user-accounts-family-safety/322690d1615743307t-user-account-image-log-user.png'
         }
     },{timestamps:true}
 )

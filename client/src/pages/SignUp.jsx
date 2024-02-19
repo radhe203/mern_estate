@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link,Navigate,useNavigate } from "react-router-dom";
+import Outh from "../components/Outh";
 function SignUp() {
   const [formData, setFormData] = useState({});
   const [Error, SetError] = useState(null);
@@ -71,6 +72,7 @@ function SignUp() {
           >
           {Lodaing ? 'Loading...' : 'Sign up'}
           </button>
+          <Outh/>
         </form>
         <div className="flex gap-2 mt-5">
           <p>Have an account</p>

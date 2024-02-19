@@ -6,6 +6,7 @@ import {
   signInSucess,
 } from "../redux/user/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Outh from "../components/Outh";
 function Signin() {
   const [formData, setFormData] = useState({});
   const {error,loading} = useSelector(state => state.user)
@@ -44,7 +45,7 @@ function Signin() {
   return (
     <>
       <div className="p-3 max-w-lg mx-auto">
-        <h1 className=" text-center text-3xl font-semibold m-7">Sign Up</h1>
+        <h1 className=" text-center text-3xl font-semibold m-7">Sign In</h1>
         <form onSubmit={handleSubmit} className=" flex flex-col gap-4 ">
           <input
             type="email"
@@ -67,6 +68,7 @@ function Signin() {
           >
             {loading ? "Loging..." : "Sign in"}
           </button>
+          <Outh/>
         </form>
         <div className="flex gap-2 mt-5">
           <p>Dont have an account</p>

@@ -22,10 +22,7 @@ function Outh() {
           photo: result.user.photoURL,
         }),
       });
-      console.log(result);
-      const data = res.json();
-      
-
+      const data = await res.json();
       Dispatch(signInSucess(data));
       navigate("/");
     } catch (error) {

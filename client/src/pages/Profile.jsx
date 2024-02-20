@@ -13,9 +13,6 @@ function Profile() {
   const [filePerc, setfilePerc] = useState(null);
   const [fileUploadError, setFileUploadEroor] = useState(false);
   const [formData, setFormData] = useState({});
-  if(filePerc === 100){
-    console.log(fileRef.target)
-  }
   useEffect(() => {
     if (file) {
       handelFileUplad(file);

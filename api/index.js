@@ -3,6 +3,7 @@ import express  from "express";
 import mongoose from "mongoose";
 import userRoutes from "./routes/user.routes.js"
 import authRoutes from "./routes/auth.routes.js"
+import cookieParser from "cookie-parser";
 configDotenv()
 
 mongoose.connect(process.env.MONGO)
@@ -12,14 +13,17 @@ mongoose.connect(process.env.MONGO)
 .catch((err)=>{
 console.log(err)
 })
-
-
 const app = express();
+app.use(cookieParser())
+
 
 app.use(express.json())
 
-app.use('/api/user',userRoutes)
+
 app.use('/api/auth',authRoutes)
+app.use('/api/user',userRoutes)
+
+
 
 app.use((err,req,res,next)=>{
     const statusCode = err.statusCode || 500;

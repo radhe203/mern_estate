@@ -23,6 +23,7 @@ function Outh() {
         }),
       });
       const data = await res.json();
+      console.log(data)
       Dispatch(signInSucess(data));
       navigate("/");
     } catch (error) {

@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import userRoutes from "./routes/user.routes.js"
 import authRoutes from "./routes/auth.routes.js"
 import cookieParser from "cookie-parser";
+import listingRoutes from './routes/listing.routes.js'
 configDotenv()
 
 mongoose.connect(process.env.MONGO)
@@ -22,6 +23,7 @@ app.use(express.json())
 
 app.use('/api/auth',authRoutes)
 app.use('/api/user',userRoutes)
+app.use('/api/listing',listingRoutes)
 
 
 

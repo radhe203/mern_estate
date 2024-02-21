@@ -14,7 +14,10 @@ import {
   updateUserFailure,
   deleteUserStart,
   deleteUserSuccess,
-  deleteUserFailure
+  deleteUserFailure,
+  signOutStart,
+  signOutSuccess,
+  signOutFailure
 } from "../redux/user/UserSlice";
 
 import { app } from "../firebase";
@@ -78,7 +81,6 @@ function Profile() {
       });
 
       const data = await res.json();
-      console.log(data);
 
       if (data.sucess === false) {
         Dispatch(updateUserFailure(data.message));
@@ -92,7 +94,7 @@ function Profile() {
   }
 
   async function handleDeleteUser(){
-    Dispatch(deleteUserStart())
+    Dispatch(signOutStart())
     try{
       const res = await fetch(`/api/user/delete/${currentuser._id}`, {
         method: "DELETE"
@@ -101,6 +103,23 @@ function Profile() {
       const data= await res.json()
   
       if (data.sucess === false) {
+        Dispatch(signOutFailure(data.message));
+        return;
+      }
+      Dispatch(signOutSuccess(data))
+      Nevigate('/')
+     
+    }catch(error){
+      Dispatch(deleteUserFailure(error.message))
+    }
+
+  }
+
+  async function handelSignOut(){
+    try{
+      const res = await fetch(`/api/auth/signout`);
+      const data= await res.json()
+      if (data.sucess === false) {
         Dispatch(deleteUserFailure(data.message));
         return;
       }
@@ -108,9 +127,8 @@ function Profile() {
       Nevigate('/')
      
     }catch(error){
-      Dispatch(deleteUserFailure(error.message))
+     
     }
-
   }
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -175,7 +193,7 @@ function Profile() {
 
         <div className="flex justify-between mt-3">
           <span className=" text-red-700 cursor-pointer" onClick={handleDeleteUser}>Delete Account</span>
-          <span className=" text-red-700 cursor-pointer">Sign out</span>
+          <span className=" text-red-700 cursor-pointer" onClick={handelSignOut}>Sign out</span>
         </div>
 
         {error ? (<p className=" text-red-700 mt3 text-center">{error}</p>):''}

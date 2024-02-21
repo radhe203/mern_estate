@@ -34,7 +34,6 @@ export async function signin(req, res, next) {
     if (!validuser) {
       return next(errorHandler(404, "user not found"));
     }
-
     const validpassword = bcryptjs.compareSync(password, validuser.password);
     if (!validpassword) {
       return next(errorHandler(404, "Wrong Credentials !"));
@@ -54,7 +53,7 @@ export async function google(req, res, next) {
   try {
     const existinguser = await user.findOne({ email: req.body.email });
     if (existinguser) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: existinguser._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = existinguser._doc;
       res
         .cookie("access_token", token, { httpOnly: true })

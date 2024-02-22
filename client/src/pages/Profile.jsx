@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector, } from "react-redux";
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {
   getDownloadURL,
   getStorage,
@@ -190,7 +190,7 @@ function Profile() {
         >
          {loading ? 'updating ...':'updtae'}
         </button>
-
+        <Link to={'/create-listing'} className=" bg-green-600 text-white text-center p-3 uppercase rounded-lg">Create listing</Link>
         <div className="flex justify-between mt-3">
           <span className=" text-red-700 cursor-pointer" onClick={handleDeleteUser}>Delete Account</span>
           <span className=" text-red-700 cursor-pointer" onClick={handelSignOut}>Sign out</span>

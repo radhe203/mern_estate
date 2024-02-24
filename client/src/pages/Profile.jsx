@@ -149,6 +149,29 @@ function Profile() {
       }
     }
   }
+
+  async function handleListingDelete(id){
+    try{
+      const res = await fetch(`api/listing/delete/${id}`,{
+        method:'DELETE'
+  
+      })
+  
+      const data = await res.json();
+  
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+  
+      setUserListings((prev) =>
+        prev.filter((listing) => listing._id !== id)
+      );
+      
+    }catch(error){
+      console.log(error);
+    }
+  }
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className=" text-3xl font-semibold text-center my-7">Profile</h1>

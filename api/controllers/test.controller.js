@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import Listing from '../models/listing.models.js'
 import { errorHandler } from "../utils/error.js";
 import bcrtptjs from "bcryptjs";
 import User from "../models/user.models.js";
@@ -48,3 +49,19 @@ export async function deleteUser(req, res, next) {
 }
 
 
+export const deleteListing = async (req,res,next)=>{
+  const listings = await Listing.findById(req.params.id)
+  if(!listings){
+    return next(errorHandler(404,'Listing Not Found'))
+  }
+  if(req.user.id !== listings.userRef){
+    return next(errorHandler(401,'you can delete only your own listing'))
+  }
+  try {
+    await Listing.findByIdAndDelete(req.params.id)
+    res.status(200).json('listing has been deleted')
+  } catch (error) {
+    next(error)
+  }
+
+}

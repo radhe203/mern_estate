@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -11,7 +12,7 @@ function CreateListing() {
   const { currentuser } = useSelector((state) => {
     return state.user.user;
   });
-  console.log(currentuser);
+  const navigate = useNavigate();
   const [files, setFile] = useState([]);
   const [imageUpladError, SetImageUpladError] = useState(false);
   const [uploading, Setuploading] = useState(false);
@@ -31,7 +32,7 @@ function CreateListing() {
     type: "rent",
     offer: false,
   });
-  console.log(formData);
+
   function handleSumbmitIamage() {
     if (files.length > 0 && files.length + formData.imageUrls.length <= 6) {
       const promises = [];
@@ -143,11 +144,13 @@ function CreateListing() {
       });
 
       const data = await res.json();
+      console.log(data)
       setLoading(false);
 
       if (data.success === false) {
         setError(data.message);
       }
+      navigate(`/listing/${data._id}`);
     } catch (error) {
       setError(data.message);
       setLoading(false);

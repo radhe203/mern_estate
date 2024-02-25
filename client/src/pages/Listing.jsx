@@ -10,12 +10,17 @@ import { FaBed } from "react-icons/fa";
 import { FaBath } from "react-icons/fa";
 import { FaParking } from "react-icons/fa";
 import { FaChair } from "react-icons/fa";
+import Contact from "../components/Contact";
 function Listing() {
   SwiperCore.use([Navigation]);
   const [listing, setListing] = useState(null);
+  const [contact, setContact] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
   const params = useParams();
+  const { currentuser } = useSelector(
+    (state) => state.user.user
+  );
   useEffect(() => {
     const fetchListing = async () => {
       try {
@@ -117,6 +122,12 @@ function Listing() {
                 {listing.furnished ? "Furnished" : "Unfurnished"}
               </li>
             </ul>
+            { currentuser && listing.userRef !== currentuser._id && !contact &&
+              <button
+              onClick={()=> setContact(!contact)}
+              className="p-3 bg-slate-700 uppercase text-white rounded-lg hover:opacity-95">Caontact landLord</button>
+            }
+            {contact && <Contact listing={listing}/>}
           </div>
         </div>
       )}

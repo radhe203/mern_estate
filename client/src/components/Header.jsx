@@ -1,11 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 function Header() {
+  const [searchTerm,setSearchTerm] = useState("")
+  const Navigate = useNavigate()
   const { currentuser } = useSelector((state) => {
     return state.user.user;
   });
+  
+  function submitHandle(e){
+    e.preventDefault()
+    const urlPrams = new URLSearchParams(window.location.search)
+    urlPrams.set('searchTerm',searchTerm)
+    const searchQuery = urlPrams.toString()
+    console.log(searchQuery)
+    Navigate(`/search?${searchQuery}`)
+  }
+
+  useEffect(()=>{
+    const urlPrams = new URLSearchParams(location.search)
+    const searchTermFormUrl = urlPrams.get('searchTerm')
+    if(searchTermFormUrl){
+      setSearchTerm(searchTermFormUrl)
+    }
+  },[location.search])
+
   return (
     <header className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -15,13 +35,19 @@ function Header() {
             <span className=" text-slate-700">Estate</span>
           </h1>
         </Link>
-        <form className=" bg-slate-100 rounded-lg p-3 flex items-center">
+        <form className=" bg-slate-100 rounded-lg p-3 flex items-center"
+        onSubmit={submitHandle}
+        >
           <input
             type="Search"
+            defaultValue={searchTerm}
+            onChange={(e)=>setSearchTerm(e.target.value)}
             placeholder="search"
             className=" bg-transparent outline-none w-24 sm:w-64"
           />
-          <FaSearch className=" text-slate-600 cursor-pointer" />
+         <button>
+         <FaSearch className=" text-slate-600 cursor-pointer" />
+         </button>
         </form>
 
         <ul className="flex gap-4 text-[13px] sm:text-[16px]">

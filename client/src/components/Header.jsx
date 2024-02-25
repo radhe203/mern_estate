@@ -14,7 +14,6 @@ function Header() {
     const urlPrams = new URLSearchParams(window.location.search)
     urlPrams.set('searchTerm',searchTerm)
     const searchQuery = urlPrams.toString()
-    console.log(searchQuery)
     Navigate(`/search?${searchQuery}`)
   }
 

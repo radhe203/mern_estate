@@ -21,6 +21,7 @@
     "swiper": "^11.0.6"
   },
   "devDependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "@types/redux-persist": "^4.3.1",

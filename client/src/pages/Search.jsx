@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import ListingItem from "../components/ListingItem";
 function Search() {
   const navigate = useNavigate();
-  const [loading ,setloading] = useState(null)
-  const [listing ,setlisting] = useState([])
-  console.log(listing)
+  const [loading, setloading] = useState(null);
+  const [listing, setlisting] = useState([]);
+  const [showMore, setShowMore] = useState(false);
+  console.log(listing);
   const [sidebardata, setSidebardata] = useState({
     searchTerm: "",
     type: "all",
@@ -15,7 +16,7 @@ function Search() {
     sort: "created_at",
     order: "desc",
   });
-// console.log(sidebardata)
+  // console.log(sidebardata)
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -47,15 +48,21 @@ function Search() {
       });
     }
 
+    const fetchlisting = async () => {
+      setloading(true);
+      setShowMore(false)
+      const res = await fetch(`/api/listing/get?${urlParams.toString()}`);
+      const data = await res.json();
+      if (data.length > 8) {
+        setShowMore(true);
+      } else {
+        setShowMore(false);
+      }
+      setlisting(data);
+      setloading(false);
+    };
 
-    const fetchlisting = async()=>{
-        const res = await fetch(`/api/listing/get?${urlParams.toString()}`)
-        const data = await res.json()
-        console.log(data)
-        setlisting(data)
-    }
-
-    navigate(`/search?${urlParams.toString()}`)
+    navigate(`/search?${urlParams.toString()}`);
 
     fetchlisting();
   }, [location.search]);
@@ -73,25 +80,25 @@ function Search() {
       setSidebardata({ ...sidebardata, searchTerm: e.target.value });
     }
 
-    if(e.target.id === "furnished" ){
-        setSidebardata({
-            ...sidebardata,
-            furnished:!sidebardata.furnished
-          });
+    if (e.target.id === "furnished") {
+      setSidebardata({
+        ...sidebardata,
+        furnished: !sidebardata.furnished,
+      });
     }
 
-    if(e.target.id === "parking" ){
-        setSidebardata({
-            ...sidebardata,
-            parking:!sidebardata.parking
-          });
+    if (e.target.id === "parking") {
+      setSidebardata({
+        ...sidebardata,
+        parking: !sidebardata.parking,
+      });
     }
 
-    if(e.target.id === "offer" ){
-        setSidebardata({
-            ...sidebardata,
-            offer:!sidebardata.offer
-          });
+    if (e.target.id === "offer") {
+      setSidebardata({
+        ...sidebardata,
+        offer: !sidebardata.offer,
+      });
     }
 
     if (e.target.id === "sort_order") {
@@ -115,6 +122,20 @@ function Search() {
     urlParams.set("order", sidebardata.order);
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
+  }
+
+  async function onShowMoreClick() {
+    const numberOfListings = listing.length;
+    const startIndex = numberOfListings;
+    const urlPrams = new URLSearchParams(location.search);
+    urlPrams.set("startIndex", startIndex);
+    const searchQuery = urlPrams.toString();
+    const res = await fetch(`/api/listing/get?${searchQuery}`);
+    const data = await res.json();
+    if (data.length < 9) {
+      setShowMore(false);
+    }
+    setlisting([...listing, ...data]);
   }
   return (
     <div className="flex flex-col md:flex-row">
@@ -227,15 +248,21 @@ function Search() {
             <p className="text-3xl text-slate-700">No listing found</p>
           )}
 
-          {
-            loading && <p className="text-center my-5">Loading....</p>
-          }
+          {loading && <p className="text-center my-5">Loading....</p>}
 
-          {
-            !loading && listing.map((listings)=>{
-              return <ListingItem key={listing._id} listing={listings}/>
-            })
-          }
+          {!loading &&
+            listing.map((listings) => {
+              return <ListingItem key={listing._id} listing={listings} />;
+            })}
+
+          {showMore && (
+            <button
+              className="text-green-700 my-3 hover:underline text-center w-full"
+              onClick={onShowMoreClick}
+            >
+              Show more...
+            </button>
+          )}
         </div>
       </div>
     </div>

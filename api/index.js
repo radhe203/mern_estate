@@ -5,9 +5,10 @@ import userRoutes from "./routes/user.routes.js"
 import authRoutes from "./routes/auth.routes.js"
 import cookieParser from "cookie-parser";
 import listingRoutes from './routes/listing.routes.js'
-import { verifyToken } from "./utils/verifyUser.js";
-import { getUser } from "./controllers/test.controller.js";
+import path from 'path'
 configDotenv()
+
+const __dirname = path.resolve()
 
 mongoose.connect(process.env.MONGO)
 .then(()=>{
@@ -27,7 +28,11 @@ app.use('/api/auth',authRoutes)
 app.use('/api/user',userRoutes)
 app.use('/api/listing',listingRoutes)
 
+app.use(express.static(path.join(__dirname,'client/dist')))
 
+app.get('*',(req,res)=>{
+    res.sendFile(path.join(__dirname,'client' ,'dist' ,'index.html'))
+})
 app.use((err,req,res,next)=>{
     const statusCode = err.statusCode || 500;
     const message = err.message || 'internal server error hello'

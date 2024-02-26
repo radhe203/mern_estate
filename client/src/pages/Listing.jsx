@@ -53,6 +53,7 @@ function Listing() {
         <p className="text-2xl text-center my-7">Something went wrong !</p>
       )}
       {listing && !loading && !error && (
+        
         <div>
           <Swiper navigation>
             {listing.imageUrls.map((url) => {

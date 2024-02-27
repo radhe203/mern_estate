@@ -94,7 +94,7 @@ function Home() {
           <div className="">
             <div className="my-3">
               <h2 className="text-2xl font-semibold">Recent offers</h2>
-              <Link to={`/search/offer=true`} className=" text-slate-600">
+              <Link to={`/search?offer=true`} className=" text-slate-600">
                 show more offers
               </Link>
             </div>
@@ -130,7 +130,7 @@ function Home() {
           <div className="">
             <div className="my-3">
               <h2 className="text-2xl font-semibold">Recent places for sale</h2>
-              <Link to={`/search/type=sale`} className=" text-slate-600">
+              <Link to={`/search?type=sale`} className=" text-slate-600">
                 Show more places for sale
               </Link>
             </div>

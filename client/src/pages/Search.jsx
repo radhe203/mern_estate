@@ -6,7 +6,6 @@ function Search() {
   const [loading, setloading] = useState(null);
   const [listing, setlisting] = useState([]);
   const [showMore, setShowMore] = useState(false);
-  console.log(listing);
   const [sidebardata, setSidebardata] = useState({
     searchTerm: "",
     type: "all",

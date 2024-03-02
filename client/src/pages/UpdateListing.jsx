@@ -44,7 +44,6 @@ function UpdateListing() {
         console.log(data.message);
         return;
       }
-      console.log(data)
     SetFormData(data);
     };
 
@@ -162,7 +161,6 @@ function UpdateListing() {
         }),
       });
       const data = await res.json();
-      console.log(data);
       setLoading(false);
 
       if (data.success === false) {

@@ -144,7 +144,6 @@ function CreateListing() {
       });
 
       const data = await res.json();
-      console.log(data)
       setLoading(false);
 
       if (data.success === false) {

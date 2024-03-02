@@ -80,7 +80,6 @@ export const getListings = async (req, res, next) => {
     }
 
     const searchTerm = req.query.searchTerm || "";
-    console.log(searchTerm)
     const sort = req.query.short || "createdAt";
     const order = req.query.order || "desc";
 
